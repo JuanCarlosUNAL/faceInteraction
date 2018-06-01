@@ -154,7 +154,8 @@ class Boid {
     int kind = TRIANGLES;
     strokeWeight(2);
     stroke(color(0, 255, 0));
-    fill(color(255, 0, 0, 125));
+    // fill(color(255, 0, 0, 125));
+    fill(color(255, 0, 0));
 
     // visual modes
     switch(mode) {

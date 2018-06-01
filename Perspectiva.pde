@@ -17,14 +17,11 @@ int boxHeight = 720;
 int boxDepth = 2300;
 boolean avoidWalls = true;
 
-// visual modes
-// 0. Faces and edges
-// 1. Wireframe (only edges)
-// 2. Only faces
-// 3. Only points
-int mode;
+int mode = 2;
 
-int initBoidNum = 90; // amount of boids to start the program with
+PShader juancho;
+
+int initBoidNum = 50;
 ArrayList<Boid> flock;
 Node avatar;
 boolean animate = true;
@@ -39,8 +36,9 @@ void settings() {
 }
 
 void setup() {
+
   scene = new Scene(this);
-  scene.setBoundingBox(new Vector(0, 0, 0), new Vector(boxWidth, boxHeight, boxDepth/2));
+  scene.setBoundingBox(new Vector(0, 0, 0), new Vector(boxWidth, boxHeight, boxDepth));
   scene.setAnchor(scene.center());
   eye = new Eye(scene);
   scene.setEye(eye);
@@ -55,16 +53,19 @@ void setup() {
 
   video = new Capture(this, (int)videoResolution.x(), (int)videoResolution.y());
   video.start();
+
+  juancho = loadShader("lightfrag.glsl", "lightvert.glsl");
 }
 
 void draw() {
   Vector p = faceDetector.getPosition();
   eye.setPosition( 
-    new Vector( boxWidth - (boxWidth * p.x()), boxHeight * p.y(),  3 * boxDepth/4 )
+    // new Vector( boxWidth - (boxWidth * p.x()), boxHeight * p.y(),  (3 * boxDepth/4) * ( p.z()/2 +0.5 ) )
+    new Vector( boxWidth - (boxWidth * p.x()), boxHeight * p.y(),  (3 * boxDepth/4)  )
   );
   background(0);
-  ambientLight(128, 128, 128);
-  directionalLight(255, 255, 255, 0, 1, -100);
+  directionalLight(200, 200, 200, 0, 1, -100);
+  // ambientLight(128, 128, 128);
   walls();
   // Calls Node.visit() on all scene nodes.
   scene.traverse();
@@ -119,10 +120,19 @@ void walls() {
   line(0, boxHeight, 0, boxWidth, boxHeight, 0);
   line(0, boxHeight, boxDepth, boxWidth, boxHeight, boxDepth);
 
+  for(float i = 0.5; i < 1; i += 0.1){
+    line(boxWidth, 0, boxDepth - boxDepth*i , boxWidth, boxHeight, boxDepth - boxDepth*i );
+    line(0, boxHeight, boxDepth - boxDepth*i , boxWidth, boxHeight, boxDepth - boxDepth*i );
+    line(0, 0, boxDepth - boxDepth*i , 0, boxHeight, boxDepth - boxDepth*i );
+    line(0, 0, boxDepth - boxDepth*i , boxWidth, 0, boxDepth - boxDepth*i );
+
+  }
+  
   line(0, 0, 0, 0, 0, boxDepth);
   line(0, boxHeight, 0, 0, boxHeight, boxDepth);
   line(boxWidth, 0, 0, boxWidth, 0, boxDepth);
   line(boxWidth, boxHeight, 0, boxWidth, boxHeight, boxDepth);
+
   popStyle();
 }
 

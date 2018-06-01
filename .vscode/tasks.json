@@ -8,5 +8,7 @@
     "--output=${workspaceRoot}/out",
     "--run"
   ],
-  "problemMatchers": []
+  "problemMatchers": [
+    "$eslint-stylish"
+  ]
 }
