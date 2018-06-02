@@ -15,16 +15,15 @@ Eye eye;
 int boxWidth = 1280;
 int boxHeight = 720;
 int boxDepth = 2300;
-boolean avoidWalls = true;
 
 int mode = 2;
+int reference = 0;
+
+Shape puntero; 
+Node selectedElement;
+ArrayList<Element> elements;
 
 PShader juancho;
-
-int initBoidNum = 50;
-ArrayList<Boid> flock;
-Node avatar;
-boolean animate = true;
 
 Vector videoResolution = new Vector(320, 240);
 Vector screenResolution = new Vector(1300, 700);
@@ -32,7 +31,6 @@ Vector screenResolution = new Vector(1300, 700);
 
 void settings() {
   size( (int)screenResolution.x(), (int)screenResolution.y(), P3D);
-  // size(1000, 800, P3D);
 }
 
 void setup() {
@@ -45,54 +43,61 @@ void setup() {
   scene.setFieldOfView(PI / 3);
   //interactivity defaults to the eye
   scene.setDefaultGrabber(eye);
+  
   scene.fitBall();
-  // create and fill the list of boids
-  flock = new ArrayList();
-  for (int i = 0; i < initBoidNum; i++)
-    flock.add(new Boid(new Vector(boxWidth / 2, boxHeight / 2, boxDepth / 2)));
+
+  puntero = new Shape(scene);
+  puntero.set(createShape(ELLIPSE, -25, 0, 50, 50));
+
+  selectedElement = puntero;
+  
+  elements = new ArrayList<Element>();
+  elements.add(new Circle(new Vector(100, 100, 0)));
+  elements.add(new Circle(new Vector(-100, 100, 200)));
+  elements.add(new Circle(new Vector(100, 100, 0)));
 
   video = new Capture(this, (int)videoResolution.x(), (int)videoResolution.y());
   video.start();
 
   juancho = loadShader("lightfrag.glsl", "lightvert.glsl");
+  
 }
 
 void draw() {
-  Vector p = faceDetector.getPosition();
-  eye.setPosition( 
-    // new Vector( boxWidth - (boxWidth * p.x()), boxHeight * p.y(),  (3 * boxDepth/4) * ( p.z()/2 +0.5 ) )
-    new Vector( boxWidth - (boxWidth * p.x()), boxHeight * p.y(),  (3 * boxDepth/4)  )
-  );
+  Vector face = faceDetector.getPosition();
   background(0);
-  directionalLight(200, 200, 200, 0, 1, -100);
-  // ambientLight(128, 128, 128);
+  ambientLight(128, 128, 128);
+  directionalLight(255, 255, 255, 0, 1, -100);
   walls();
+
+  switch(reference){
+    case 0:
+      moveReference(face);
+    break;
+    
+  }
+
   // Calls Node.visit() on all scene nodes.
   scene.traverse();
-  // drawperspective(fp);
+  drawCamera(face);
 }
 
-void captureEvent(Capture c) {
-  c.read();
-}
-
-void drawperspective(Vector p){
+void moveReference(Vector p){
   pushStyle();
-  Vector fp = new Vector( screenResolution.x() - screenResolution.x() * p.x(), screenResolution.y() * p.y(), screenResolution.z() * p.z() );
-  stroke(255,0,0);
-  strokeWeight(2);
-  
-  line( screenResolution.x() , 0, fp.x(), fp.y());
-  line( screenResolution.x() , screenResolution.y(), fp.x(), fp.y());
-  line( 0 , screenResolution.y(), fp.x(), fp.y());
-  line( 0 , 0, fp.x(), fp.y());
+
+  fill(color(255, 255, 0));
+  Vector n = new Vector( boxWidth - (boxWidth * p.x()), boxHeight * p.y(),  (3 * boxDepth/4)  );
+  selectedElement.setPosition(n);
 
   popStyle();
 }
 
 void drawCamera(Vector p){
+  pushMatrix();
+  scene.beginScreenCoordinates();
   pushStyle();
-  int scalaFactor = 4;
+
+  int scalaFactor = 8;
   Vector fp = new Vector( videoResolution.x() * p.x(), videoResolution.y() * p.y(), videoResolution.z() * p.z() );
   image(video, (scalaFactor-1)*screenResolution.x()/scalaFactor, 
                (scalaFactor-1)*screenResolution.y()/scalaFactor,
@@ -102,7 +107,9 @@ void drawCamera(Vector p){
   rect( ( (scalaFactor - 1) * screenResolution.x() / scalaFactor ) + (screenResolution.x() / scalaFactor) * p.x(), 
         ( (scalaFactor - 1) * screenResolution.y() / scalaFactor ) + (screenResolution.y() / scalaFactor) * p.y(), 3, 3);
 
-  popStyle();        
+  popStyle();
+  scene.endScreenCoordinates();
+  popMatrix();
 }
 
 void walls() {
@@ -130,7 +137,7 @@ void walls() {
   
   line(0, 0, 0, 0, 0, boxDepth);
   line(0, boxHeight, 0, 0, boxHeight, boxDepth);
-  line(boxWidth, 0, 0, boxWidth, 0, boxDepth);
+  line(boxWidth, 0, 0, boxWidth, 0, boxDepth);  
   line(boxWidth, boxHeight, 0, boxWidth, boxHeight, boxDepth);
 
   popStyle();
@@ -138,34 +145,19 @@ void walls() {
 
 void keyPressed() {
   switch (key) {
-  case 'a':
-    animate = !animate;
-    break;
-  case 's':
-    if (scene.eye().reference() == null)
-      scene.fitBallInterpolation();
-    break;
-  case 't':
-    scene.shiftTimers();
-    break;
-  case 'p':
-    println("Frame rate: " + frameRate);
-    break;
-  case 'v':
-    avoidWalls = !avoidWalls;
-    break;
-  case 'm':
-    mode = mode < 3 ? mode+1 : 0;
-    break;
-  case ' ':
-    if (scene.eye().reference() != null) {
-      scene.lookAt(scene.center());
-      scene.fitBallInterpolation();
-      scene.eye().setReference(null);
-    } else if (avatar != null) {
-      scene.eye().setReference(avatar);
-      scene.interpolateTo(avatar);
-    }
-    break;
+    case ' ':
+      for( Element e : elements ){
+        Vector comparableA = new Vector (e.position().x(), e.position().y());
+        Vector comparableB = new Vector (selectedElement.position().x(), selectedElement.position().y());
+        float distance = Vector.distance(comparableA,comparableB);
+        if(e != selectedElement ){
+          System.out.println( distance);
+          selectedElement = distance < 300?e:selectedElement;
+        }
+      }
+      break;
+    case 'x':
+      selectedElement = puntero;
+      break;
   }
 }
