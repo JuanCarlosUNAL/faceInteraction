@@ -54,7 +54,7 @@ void setup() {
   elements = new ArrayList<Element>();
   elements.add(new Circle(new Vector(100, 100, 0)));
   elements.add(new Circle(new Vector(-100, 100, 200)));
-  elements.add(new Circle(new Vector(100, 100, 0)));
+  elements.add(new Circle(new Vector(100, 300, 0)));
 
   video = new Capture(this, (int)videoResolution.x(), (int)videoResolution.y());
   video.start();
@@ -152,7 +152,7 @@ void keyPressed() {
         float distance = Vector.distance(comparableA,comparableB);
         if(e != selectedElement ){
           System.out.println( distance);
-          selectedElement = distance < 300?e:selectedElement;
+          selectedElement = (distance < 300)?e:selectedElement;
         }
       }
       break;
