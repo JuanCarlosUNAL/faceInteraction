@@ -16,22 +16,22 @@ Complete la tabla:
 
 ## Idea
 
-La idea es crear interaccion con la aplicación a travez del segumiento del rostro. La idea surge, de las nuevas tendencias de usar gestos corporales que son captados, por lo general con dispositivos especializados como Kniks(microsoft) o Eye(PlayStation Sony). Sin embargo la idea principal es usar la camara web ya que es un dispositivo comun en la mayoria de computadores. Para la interacción se tubieron en cuneta 2 ambientes:
+La idea es crear interacción con la aplicación a través del seguimiento del rostro. La idea surge, de las nuevas tendencias de usar gestos corporales que son captados, por lo general con dispositivos especializados como Kinect(microsoft) o Eye(PlayStation Sony). Sin embargo la idea principal es usar la cámara web ya que es un dispositivo común en la mayoría de computadores. Para la interacción se tuvieron en cuneta 2 ambientes:
 
-* Movimiento a travez del espacio, en el cual el movimiento genera un movimiento con el cual el usuario se pueda mover en el espacio en el que se encuentra
-* Manipulacion de objetos, en el cual el usuario es capaz de manipular los objetos que se encuentran en la escena a travez de movimientos de la camara 
+* Movimiento a través del espacio, en el cual el movimiento genera un movimiento con el cual el usuario se pueda mover en el espacio en el que se encuentra.
+* Manipulación de objetos, en el cual el usuario es capaz de manipular los objetos que se encuentran en la escena a través de movimientos de la cámara.
 
-Se usó la libreria [OpenCv](https://github.com/atduskgreg/opencv-processing) para la deteccion de rostros, el cual usaremos para la interacción. Para instalar la libreria en processesing descargamos del gestor de paquetes que processing ya trae o la descargamos directamente del  [repositorio de GitHub](https://github.com/atduskgreg/opencv-processing) 
+Se usó la librería [OpenCv](https://github.com/atduskgreg/opencv-processing)  para la detección de rostros, el cual usaremos para la interacción. Para instalar la librería en Processing descargamos del gestor de paquetes que Processing ya trae o la descargamos directamente del  [repositorio de GitHub](https://github.com/atduskgreg/opencv-processing) 
 
-Ademas para la manipulación del ambiente y la escena se usa [Frames](https://github.com/VisualComputing/framesjs) ya que la estructura de grafo facilita el cambio de perspectivas de la escena de una manera intuitiva.
+Además para la manipulación del ambiente y la escena se usa [Frames](https://github.com/VisualComputing/framesjs) ya que la estructura de grafo facilita el cambio de perspectivas de la escena de una manera intuitiva.
 
 ## Trabajo futuro
-Existen gran cantidad de trabajo en opencv entre el cual podemos encontrar deteccion de gran cantidad de objetos, como las manos, el esqueleto tanto del cuerpo como de las manos, los cuales podria usarse para una manipulaccion e interaccion con escenas mucho mas amplia.
+Existen gran cantidad de trabajo en opencv entre el cual podemos encontrardetección de gran cantidad de objetos, como las manos, el esqueleto tanto del cuerpo como de las manos, los cuales podría usarse para una manipulación e interacción con escenas mucho mas amplia.
 
 ## Ejecución
 
-* Para ejecutar asegurese de tener tanto Opencv para processing como frames instalados debidamente
-* Clonar este repositorio de manera loical con ```git clone```
-* Existen dos versiones como se explico mas arriba. La primera en la rama ```master``` para movernos a travez de la escena. la segunda en la rama ```manipulacion``` en la cual poremos manipular algunos objetos en la scena
+* Para ejecutar asegúrese de tener tanto Opencv para processing como frames instalados debidamente
+* Clonar este repositorio de manera local con ```git clone```
+* Existen dos versiones como se explico mas arriba. La primera en la rama ```master``` para movernos a través de la escena. la segunda en la rama ```manipulacion``` en la cual podremos manipular algunos objetos en la escena
 
 
