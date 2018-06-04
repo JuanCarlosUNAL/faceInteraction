@@ -26,7 +26,7 @@ Se usó la librería [OpenCv](https://github.com/atduskgreg/opencv-processing)  
 Además para la manipulación del ambiente y la escena se usa [Frames](https://github.com/VisualComputing/framesjs) ya que la estructura de grafo facilita el cambio de perspectivas de la escena de una manera intuitiva.
 
 ## Trabajo futuro
-Existen gran cantidad de trabajo en opencv entre el cual podemos encontrardetección de gran cantidad de objetos, como las manos, el esqueleto tanto del cuerpo como de las manos, los cuales podría usarse para una manipulación e interacción con escenas mucho mas amplia.
+Existen gran cantidad de trabajo en opencv entre el cual podemos encontrar detección de gran cantidad de objetos, como las manos, el esqueleto tanto del cuerpo como de las manos, los cuales podría usarse para una manipulación e interacción con escenas mucho mas amplia.
 
 ## Ejecución
 
